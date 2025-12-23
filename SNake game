@@ -1,0 +1,185 @@
+import pygame
+import sys
+import random
+
+# --- Config ---
+WIDTH, HEIGHT = 600, 600
+GRID_SIZE = 20
+GRID_WIDTH = WIDTH // GRID_SIZE
+GRID_HEIGHT = HEIGHT // GRID_SIZE
+
+FPS = 12
+FONT_NAME = "arial"
+
+# Colors
+BLACK = (0, 0, 0)
+DARK = (20, 20, 20)
+WHITE = (255, 255, 255)
+GREEN = (0, 200, 0)
+RED = (220, 50, 50)
+ORANGE = (255, 140, 0)
+GRAY = (50, 50, 50)
+
+# --- Helpers ---
+def draw_text(surf, text, size, color, center):
+    font = pygame.font.SysFont(FONT_NAME, size)
+    label = font.render(text, True, color)
+    rect = label.get_rect(center=center)
+    surf.blit(label, rect)
+
+def random_cell(exclude):
+    while True:
+        p = (random.randint(0, GRID_WIDTH - 1), random.randint(0, GRID_HEIGHT - 1))
+        if p not in exclude:
+            return p
+
+def cell_to_rect(cell):
+    x, y = cell
+    return pygame.Rect(x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+
+# --- Game objects ---
+class Snake:
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        center = (GRID_WIDTH // 2, GRID_HEIGHT // 2)
+        # Start bigger (length 8 instead of 3)
+        self.body = [(center[0] - i, center[1]) for i in range(8)]
+        self.direction = (1, 0)
+        self.pending_growth = 0
+        self.alive = True
+
+    def set_direction(self, dx, dy):
+        if (dx, dy) == (-self.direction[0], -self.direction[1]):
+            return
+        self.direction = (dx, dy)
+
+    def update(self):
+        if not self.alive:
+            return
+        head_x, head_y = self.body[0]
+        nx = (head_x + self.direction[0]) % GRID_WIDTH
+        ny = (head_y + self.direction[1]) % GRID_HEIGHT
+        new_head = (nx, ny)
+
+        if new_head in self.body:
+            self.alive = False
+            return
+
+        self.body.insert(0, new_head)
+        if self.pending_growth > 0:
+            self.pending_growth -= 1
+        else:
+            self.body.pop()
+
+    def grow(self, amount=1):
+        self.pending_growth += amount
+
+    def draw(self, surf):
+        pygame.draw.rect(surf, ORANGE, cell_to_rect(self.body[0]))
+        for cell in self.body[1:]:
+            pygame.draw.rect(surf, GREEN, cell_to_rect(cell))
+
+class Food:
+    def __init__(self, snake_body):
+        self.pos = random_cell(set(snake_body))
+
+    def respawn(self, snake_body):
+        self.pos = random_cell(set(snake_body))
+
+    def draw(self, surf):
+        pygame.draw.rect(surf, RED, cell_to_rect(self.pos))
+
+# --- Main game ---
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Snake with Lives")
+    clock = pygame.time.Clock()
+
+    snake = Snake()
+    food = Food(snake.body)
+    score = 0
+    lives = 3
+    paused = False
+
+    grid_surf = pygame.Surface((WIDTH, HEIGHT))
+    grid_surf.fill(DARK)
+    for x in range(GRID_WIDTH):
+        for y in range(GRID_HEIGHT):
+            rect = cell_to_rect((x, y))
+            if (x + y) % 2 == 0:
+                pygame.draw.rect(grid_surf, GRAY, rect, 1)
+
+    def reset_after_death():
+        nonlocal snake, food
+        snake.reset()
+        food.respawn(snake.body)
+
+    def reset_game():
+        nonlocal snake, food, score, lives, paused
+        snake.reset()
+        food.respawn(snake.body)
+        score = 0
+        lives = 3
+        paused = False
+
+    while True:
+        clock.tick(FPS)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key in (pygame.K_w, pygame.K_UP):
+                    snake.set_direction(0, -1)
+                elif event.key in (pygame.K_s, pygame.K_DOWN):
+                    snake.set_direction(0, 1)
+                elif event.key in (pygame.K_a, pygame.K_LEFT):
+                    snake.set_direction(-1, 0)
+                elif event.key in (pygame.K_d, pygame.K_RIGHT):
+                    snake.set_direction(1, 0)
+                elif event.key == pygame.K_p:
+                    paused = not paused
+                elif event.key == pygame.K_r:
+                    reset_game()
+
+        if snake.alive and not paused:
+            snake.update()
+            if snake.body[0] == food.pos:
+                snake.grow(1)
+                score += 10
+                food.respawn(snake.body)
+
+        # Handle death with lives
+        if not snake.alive and lives > 0:
+            lives -= 1
+            reset_after_death()
+
+        screen.blit(grid_surf, (0, 0))
+        food.draw(screen)
+        snake.draw(screen)
+
+        draw_text(screen, f"Score: {score}", 24, WHITE, (70, 20))
+        draw_text(screen, f"Lives: {lives}", 24, WHITE, (WIDTH - 70, 20))
+
+        if paused:
+            draw_text(screen, "Paused", 48, WHITE, (WIDTH // 2, HEIGHT // 2))
+
+        if lives == 0 and not snake.alive:
+            draw_text(screen, "Game Over", 56, WHITE, (WIDTH // 2, HEIGHT // 2 - 30))
+            draw_text(screen, f"Final Score: {score}", 28, WHITE, (WIDTH // 2, HEIGHT // 2 + 10))
+            draw_text(screen, "Press R to restart | Esc to quit", 22, WHITE, (WIDTH // 2, HEIGHT // 2 + 40))
+
+        pygame.display.flip()
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            pygame.quit()
+            sys.exit()
+
+if __name__ == "__main__":
+    main()
