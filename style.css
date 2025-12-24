@@ -1,0 +1,180 @@
+/* Base page styling */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url(assets/background.jpeg);
+  color: #fff;
+  padding: 2rem;
+}
+
+/* Page heading */
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 2.2rem;
+  color: #fff;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* Grid container for the periodic table */
+.periodic-table {
+  display: grid;
+  grid-template-columns: repeat(18, minmax(45px, 1fr));
+  grid-auto-rows: minmax(50px, auto);
+  gap: 5px;
+  justify-content: center;
+  max-width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+/* Each element box */
+.element {
+  border-radius: 6px;
+  text-align: center;
+  padding: 4px;
+  font-size: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+/* Hover effect */
+.element:hover {
+  transform: scale(1.23);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.155);
+}
+
+/* Element text details */
+.number {
+  font-size: 0.6rem;
+  opacity: 0.8;
+}
+
+.symbol {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.name {
+  font-size: 0.55rem;
+  opacity: 0.8;
+}
+
+/* Empty slots (if any) */
+.empty {
+  background: transparent;
+  border: none;
+}
+
+/* =====================  COLOR GROUP STYLING  ===================== */
+
+/* Alkali Metals - Red-Pink */
+.alkali-metal {
+  background-color: #fd7070;
+}
+
+/* Alkaline Earth Metals - Light Orange */
+.alkaline-earth {
+  background-color: #FFDEAD;
+}
+
+/* Transition Metals - Gold */
+.transition-metal {
+  background-color: #FFD700;
+}
+
+/* Post-transition Metals - Dull Blue */
+.post-transition-metal {
+  background-color: #8da7f6f6;
+}
+
+/* Metalloids - Green-Yellow */
+.metalloid {
+  background-color: #ADFF2F;
+}
+
+/* Other Nonmetals - Light Green */
+.nonmetal {
+  background-color: #90EE90;
+}
+
+/* Halogens - Light Salmon */
+.halogen {
+  background-color: #FFA07A;
+}
+
+/* Noble Gases - Sky Blue */
+.noble-gas {
+  background-color: #87CEFA;
+}
+
+/* Lanthanides - Light Pink */
+.lanthanide {
+  background-color: #FFB6C1;
+}
+
+/* Actinides - Plum */
+.actinide {
+  background-color: #DDA0DD;
+}
+
+/* Unknown / Synthetic - Light Gray */
+.unknown {
+  background-color: #D3D3D3;
+}
+
+/* Mobile: stack-friendly layout */
+@media (max-width: 768px) {
+  .periodic-table {
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    grid-auto-rows: minmax(45px, auto);
+    gap: 4px;
+  }
+
+  .element {
+    font-size: 0.65rem;
+    padding: 2px;
+  }
+
+  .symbol {
+    font-size: 1rem;
+  }
+
+  .number {
+    font-size: 0.5rem;
+  }
+
+  .name {
+    font-size: 0.45rem;
+  }
+}
+
+/* Ultra-small devices (phones <400px) */
+@media (max-width: 400px) {
+  .periodic-table {
+    grid-template-columns: repeat(auto-fit, minmax(35px, 1fr));
+    gap: 3px;
+  }
+
+  .element {
+    font-size: 0.6rem;
+  }
+
+  .symbol {
+    font-size: 0.9rem;
+  }
+
+  .number {
+    font-size: 0.45rem;
+  }
+
+  .name {
+    font-size: 0.4rem;
+  }
+}
