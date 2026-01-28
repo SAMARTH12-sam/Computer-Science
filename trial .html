@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trial Page</title>
+    <style>
+        body {
+            font-size: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        ol {
+            background: white;
+            padding: 20px 40px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: inline-block;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            transition: background 0.3s ease;
+        }
+        
+        button:hover {
+            background: #764ba2;
+        }
+        
+        #Answer {
+            display: none;
+            color: #667eea;
+            font-weight: bold;
+            margin-left: 10px;
+            animation: slideIn 0.5s ease-in-out;
+        }
+        
+        #Answer.show {
+            display: inline;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .answer-section {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center;">
+       <img src ="quiz.jpeg" alt="quiz image" width="300" height="200">
+    </div>
+        <h1> Which of the following is not a coding language?</h1> 
+        <ol>
+            <li>HTML</li>
+            <li>python</li>
+            <li>JavaScript</li>
+            <li>code.org </li>
+        </ol>
+        <form>
+            <span>
+                <label>Enter your answer:</label>
+                <input type="text" id="txtAns">
+                <button type="button" onclick="showAnswer()">Click me!</button>
+                <div class="answer-section">
+                    <span>Correct answer: </span>
+                    <output id="Answer">code.org</output>
+                </div>
+            </span>
+        </form>
+    </body>
+    <script>
+        function showAnswer() {
+            const answerOutput = document.getElementById('Answer');
+            answerOutput.classList.add('show');
+        }
+    </script>
+</html>
