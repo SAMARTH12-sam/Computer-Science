@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Marks Tracker Pro with Verification</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, rgb(23,56,87), #0a1a2f);
+      color: #f0f0f0;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 { color: #ffe066; }
+    table {
+      margin: auto;
+      border-collapse: collapse;
+      background: #fff;
+      color: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    th, td { padding: 12px; border: 1px solid #ccc; }
+    th { background: #004488; color: #fff; }
+    input {
+      width: 120px;
+      padding: 6px;
+      text-align: center;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #ffe066;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover { background: #ffcc00; }
+    .result {
+      margin-top: 25px;
+      font-size: 18px;
+      background: #fff;
+      color: #000;
+      padding: 20px;
+      border-radius: 12px;
+      width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      text-align: left;
+    }
+    .progress {
+      margin-top: 15px;
+      background: #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 20px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #004488;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    .grade {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Marks Tracker Pro</h1>
+
+  <!-- Name, Age, Class Input -->
+  <div>
+    <label>Name: <input type="text" id="name"></label>
+    <label>Age: <input type="number" id="age" min="5" max="25"></label>
+    <label>Class: <input type="number" id="class" min="1" max="12"></label>
+  </div>
+
+  <table>
+    <tr><th>Subject</th><th>Marks</th></tr>
+    <tr><td>Math</td><td><input type="number" id="math" min="0" max="100"></td></tr>
+    <tr><td>Physics</td><td><input type="number" id="physics" min="0" max="100"></td></tr>
+    <tr><td>Chemistry</td><td><input type="number" id="chemistry" min="0" max="100"></td></tr>
+    <tr><td>English</td><td><input type="number" id="english" min="0" max="100"></td></tr>
+    <tr><td>Computer Science</td><td><input type="number" id="cs" min="0" max="100"></td></tr>
+    <tr><td>Biology</td><td><input type="number" id="biology" min="0" max="100"></td></tr>
+    <tr><td>History</td><td><input type="number" id="history" min="0" max="100"></td></tr>
+    <tr><td>Geography</td><td><input type="number" id="geography" min="0" max="100"></td></tr>
+  </table>
+
+  <button onclick="calculateMarks()">Calculate Results</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculateMarks() {
+      const name = document.getElementById("name").value.trim();
+      const age = parseInt(document.getElementById("age").value);
+      const grade = parseInt(document.getElementById("class").value);
+
+      // Name validation
+      if (!name || name.length < 2 || /[^a-zA-Z\s]/.test(name)) {
+        return runVerification("Name verification failed");
+      }
+
+      // Age & grade validation
+      if (!age || !grade) {
+        alert("Please enter valid age and class.");
+        return;
+      }
+      if (grade < 5) {
+        alert("Sorry, this tracker is only for 5th grade and above.");
+        return;
+      }
+      if (Math.abs(age - (grade + 5)) > 3) {
+        return runVerification("Age/Grade mismatch verification required");
+      }
+
+      // Collect marks
+      const subjects = ["math","physics","chemistry","english","cs","biology","history","geography"];
+      let marks = [];
+      for (let subj of subjects) {
+        let val = parseFloat(document.getElementById(subj).value);
+        if (isNaN(val) || val < 0 || val > 100) {
+          alert("Invalid input for " + subj + ". Enter marks between 0 and 100.");
+          return;
+        }
+        marks.push(val);
+      }
+
+      const total = marks.reduce((a,b)=>a+b,0);
+      const average = total / marks.length;
+
+      // Adjust total marks based on grade
+      let maxMarksPerSubject = 100;
+      if (grade === 6 || grade === 7) {
+        maxMarksPerSubject = 80;
+      }
+      const maxTotal = marks.length * maxMarksPerSubject;
+      const percentage = (total / maxTotal) * 100;
+
+      // Pass/Fail based on average
+      const pass = average >= 40;
+
+      // Grade system
+      let gradeLetter;
+      if (percentage >= 90) gradeLetter = "A+";
+      else if (percentage >= 75) gradeLetter = "A";
+      else if (percentage >= 60) gradeLetter = "B";
+      else if (percentage >= 50) gradeLetter = "C";
+      else gradeLetter = "F";
+
+      document.getElementById("result").innerHTML = `
+        <b>Name:</b> ${name}<br>
+        <b>Age:</b> ${age}<br>
+        <b>Class:</b> ${grade}<br>
+        <b>Total Marks:</b> ${total} / ${maxTotal}<br>
+        <b>Average:</b> ${average.toFixed(2)}<br>
+        <b>Percentage:</b> ${percentage.toFixed(2)}%<br>
+        <b>Status:</b> ${pass ? "Pass ✅" : "Fail ❌"}<br>
+        <div class="progress"><div class="progress-bar" style="width:${percentage}%"></div></div>
+        <div class="grade">Grade: ${gradeLetter}</div>
+      `;
+    }
+
+    // Verification mode: ask questions for each subject
+    function runVerification(reason) {
+      const questions = {
+        math: "What is 5 + 7?",
+        physics: "What force keeps planets in orbit?",
+        chemistry: "What is H2O commonly called?",
+        english: "What is the opposite of 'hot'?",
+        cs: "What does 'CPU' stand for?",
+        biology: "Which organ pumps blood?",
+        history: "Who was the first President of the USA?",
+        geography: "Which is the largest ocean?"
+      };
+
+      const answers = {
+        math: "12",
+        physics: "gravity",
+        chemistry: "water",
+        english: "cold",
+        cs: "central processing unit",
+        biology: "heart",
+        history: "george washington",
+        geography: "pacific"
+      };
+
+      alert(reason + ". Verification required.");
+      for (let subj in questions) {
+        let response = prompt("Subject: " + subj.toUpperCase() + "\n" + questions[subj]);
+        if (!response || response.toLowerCase().trim() !== answers[subj]) {
+          alert("Verification failed for " + subj + ". Access denied.");
+          return; // stop if any subject fails
+        }
+      }
+      alert("Verification passed. You may now enter marks.");
+    }
+  </script>
+</body>
+</html>

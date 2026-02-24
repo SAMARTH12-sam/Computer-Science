@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Maths Quiz Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .quiz-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options label {
+      display: block;
+      margin-left: 20px;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+    .correct-answer {
+      color: blue;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <h1>Maths Quiz</h1>
+
+    <form id="quizForm" onsubmit="checkAnswers(event)">
+     <div id="q1" class="question">
+        <p>1. What is 5 + 3?</p>
+        <div class="options">
+		<label><input type= "radio"name="q1" value="a" form="quizForm"> 8</label>
+       <label><input type="radio" name="q1" value="b" form="quizForm"> 9</label>
+		<label><input type="radio" name="q1" value="c" form="quizForm"> 10</label>
+          <label><input type="radio" name="q1" value="d" form="quizForm"> 7</label>
+        </div>
+      </div>
+	   
+	    <div id="q2" class="question">
+        <p>2. What is 12 ÷ 4?</p>
+        <div class="options"> 
+		 <label><input type="radio" name="q2 value="a"form="quizForm">2</label>
+		  <label><input type="radio" name="q2"value="b" form="quizForm"> 3 </label>
+         <label><input type="radio" name="q2 value="c"form="quizForm">4</label>
+         <label><input type="radio" name="q2" value="d" form="quizForm"> 5</label>
+		 </div>
+	</div>
+
+    <div id="q3" class="question">
+        <p>3. What is √49?</p>
+        <div class="options">
+          <label><input type="radio" name="q3" value="a" form="quizForm"> 6</label>
+          <label><input type="radio" name="q3" value="b" form="quizForm"> 8</label>
+          <label><input type="radio" name="q3" value="c" form="quizForm"> 7</label>
+          <label><input type="radio" name="q3" value="d" form="quizForm"> 9</label>
+        </div>
+      </div>   
+	  
+	 <div id="q4" class="question">
+        <p>4. What is 15 – 9?</p>
+        <div class="options">
+          <label><input type="radio" name="q4"value="a" form="quizForm"> 5<label>
+          <label><input type="radio" name="q4"value="b" form="quizForm"> 8</label>
+          <label><input type="radio" name="q4"value="c" form="quizForm"> 9</label>
+          <label><input type="radio" name="q4"value="d" form="quizForm"> 6</label>
+        </div>
+      </div>
+	   <div id="q5" class="question">
+        <p>5. What is 20 × 2?</p>
+        <div class="options">
+          <label><input type="radio" name="q5" value="a" form="quizForm"> 40</label>
+          <label><input type="radio" name="q5" value="b" form="quizForm"> 30</label>
+          <label><input type="radio" name="q5" value="c" form="quizForm"> 50</label>
+          <label><input type="radio" name="q5" value="d" form="quizForm"> 60</label>
+        </div>
+      </div>
+
+      <div id="q6" class="question">
+        <p>6. What is 9 × 7?</p>
+        <div class="options">
+          <label><input type="radio" name="q6" value="a" form="quizForm"> 72</label>
+          <label><input type="radio" name="q6" value="b" form="quizForm"> 63</label>
+          <label><input type="radio" name="q6" value="c" form="quizForm"> 81</label>
+          <label><input type="radio" name="q6" value="d" form="quizForm"> 56</label>
+        </div>
+      </div>
+
+      <div id="q7" class="question">
+        <p>7. What is 100 – 37?</p>
+        <div class="options">
+          <label><input type="radio" name="q7" value="a" form="quizForm"> 62</label>
+          <label><input type="radio" name="q7" value="b" form="quizForm"> 64</label>
+          <label><input type="radio" name="q7" value="c" form="quizForm"> 63</label>
+          <label><input type="radio" name="q7" value="d" form="quizForm"> 65</label>
+        </div>
+      </div>
+
+      <div id="q8" class="question">
+        <p>8. What is 9 × 9?</p>
+        <div class="options">
+          <label><input type="radio" name="q8" value="a" form="quizForm"> 72</label>
+          <label><input type="radio" name="q8" value="b" form="quizForm"> 99</label>
+          <label><input type="radio" name="q8" value="c" form="quizForm"> 90</label>
+          <label><input type="radio" name="q8" value="d" form="quizForm"> 81</label>
+        </div>
+      </div>
+
+      <div id="q9" class="question">
+        <p>9. What is the cube of 3?</p>
+        <div class="options">
+          <label><input type="radio" name="q9" value="a" form="quizForm"> 27</label>
+          <label><input type="radio" name="q9" value="b" form="quizForm"> 9</label>
+          <label><input type="radio" name="q9" value="c" form="quizForm"> 81</label>
+          <label><input type="radio" name="q9" value="d" form="quizForm"> 18</label>
+        </div>
+      </div>
+
+      <div id="q10" class="question">
+        <p>10. Solve: (20 ÷ 4) + 6</p>
+        <div class="options">
+          <label><input type="radio" name="q10" value="a" form="quizForm"> 10</label>
+          <label><input type="radio" name="q10" value="b" form="quizForm"> 11</label>
+          <label><input type="radio" name="q10" value="c" form="quizForm"> 12</label>
+       
+	   </div>
+      </div>
+
+	
+	  
+
+	 <input type="submit" value="Submit Answers">
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function checkAnswers(event) {
+      event.preventDefault();
+
+      // Correct answers for each question
+      const correctAnswers = {
+        q1: "a",
+        q2: "b",
+        q3: "c",
+        q4: "d",
+        q5: "a",
+        q6: "b",
+        q7: "c",
+        q8: "d",
+        q9: "a",
+        q10: "b"
+      };
+
+      let score = 0;
+
+      // Clear previous highlights
+      document.querySelectorAll(".correct-answer").forEach(el => {
+        el.classList.remove("correct-answer");
+      });
+
+      // Check each question
+      for (let q in correctAnswers) {
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        const correctValue = correctAnswers[q];
+
+        // Highlight the correct option
+        const correctOption = document.querySelector(
+          `input[name="${q}"][value="${correctValue}"]`
+        );
+        if (correctOption) {
+          correctOption.parentElement.classList.add("correct-answer");
+        }
+
+        // Increase score if user selected correctly
+        if (selected && selected.value === correctValue) {
+          score++;
+        }
+      }
+
+      // Show result
+      document.getElementById("result").textContent =
+        "You scored " + score + " out of 10.";
+    }
+  </script>
+</body>
+</html>

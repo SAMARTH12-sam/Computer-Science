@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Newton's Laws and Equations of Motion</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: rgb(23,56,87);
+      color: #f0f0f0;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 { margin-bottom: 10px; }
+    h2 { color: #ffe066; }
+    .container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .panel {
+      background: #fff;
+      color: #000;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      padding: 15px;
+      width: 300px;
+    }
+    canvas {
+      background: #eef;
+      border: 1px solid #333;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .info { margin-top: 10px; font-size: 14px; text-align: left; }
+    .laws, .example {
+      background: #fff;
+      color: #000;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      padding: 20px;
+      margin: 20px auto;
+      width: 800px;
+      text-align: left;
+    }
+    .laws h2, .example h2 { color: #004488; }
+    .math { font-family: "Courier New", monospace; background: #eef; padding: 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  
+  <video controls>
+  <source src="explain1.mp4"type="video/mp4">
+  </video>
+  
+  
+  <h1>Newton's Laws and Equations of Motion</h1>
+  <p>Visualizing displacement, velocity, and acceleration under constant acceleration.</p>
+
+  <!-- Newton's Laws Section -->
+  <div class="laws">
+    <h2>Newton's Three Laws of Motion</h2>
+    <p><b>First Law (Inertia):</b> An object remains at rest or in uniform motion unless acted upon by a force.<br>
+    Proof: From <span class="math">F = ma</span>, if <span class="math">F = 0</span>, then <span class="math">a = 0</span>. Velocity stays constant: <span class="math">v = u</span>.</p>
+
+    <p><b>Second Law (Acceleration):</b> Force equals rate of change of momentum.<br>
+    Proof: <span class="math">F = dp/dt = m dv/dt = ma</span>. This leads to the equations of motion.</p>
+
+    <p><b>Third Law (Action–Reaction):</b> For every action, there is an equal and opposite reaction.<br>
+    Proof: Conservation of momentum gives <span class="math">F_AB = -F_BA</span>.</p>
+  </div>
+
+  <!-- Equations of Motion Animations -->
+  <div class="container">
+    <div class="panel">
+      <h2>Equation 1: v = u + at</h2>
+      <canvas id="canvas1" width="280" height="150"></canvas>
+      <div class="info" id="info1"></div>
+    </div>
+    <div class="panel">
+      <h2>Equation 2: s = ut + ½at²</h2>
+      <canvas id="canvas2" width="280" height="150"></canvas>
+      <div class="info" id="info2"></div>
+    </div>
+    <div class="panel">
+      <h2>Equation 3: v² = u² + 2as</h2>
+      <canvas id="canvas3" width="280" height="150"></canvas>
+      <div class="info" id="info3"></div>
+    </div>
+  </div>
+
+  <!-- Worked Example -->
+  <div class="example">
+    <h2>Worked Example</h2>
+    <p><b>Given:</b> u = 20 m/s, a = 5 m/s², t = 4 s</p>
+    <p><b>Equation 1:</b> v = u + at = 20 + (5×4) = <b>40 m/s</b></p>
+    <p><b>Equation 2:</b> s = ut + ½at² = (20×4) + ½(5)(16) = <b>120 m</b></p>
+    <p><b>Equation 3:</b> v² = u² + 2as = 400 + 1200 = 1600 → v = <b>40 m/s</b></p>
+    <p>✔ All equations agree!</p>
+  </div>
+
+  <script>
+    const u = 20;   // initial velocity (m/s)
+    const a = 5;    // acceleration (m/s^2)
+    let t = 0;
+    const dt = 0.05;
+
+    const canvases = [
+      {canvas: document.getElementById("canvas1"), info: document.getElementById("info1")},
+      {canvas: document.getElementById("canvas2"), info: document.getElementById("info2")},
+      {canvas: document.getElementById("canvas3"), info: document.getElementById("info3")}
+    ];
+
+    function animate() {
+      t += dt;
+      canvases.forEach((c, idx) => {
+        const ctx = c.canvas.getContext("2d");
+        ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
+
+        // Draw baseline
+        ctx.beginPath();
+        ctx.moveTo(20, c.canvas.height/2);
+        ctx.lineTo(c.canvas.width-20, c.canvas.height/2);
+        ctx.strokeStyle = "#333";
+        ctx.stroke();
+
+        let x, v, s;
+        if (idx === 0) {
+          v = u + a * t;
+          x = 30 + v * 2; // scaled velocity
+          c.info.innerHTML = `Time: ${t.toFixed(2)}s<br>Velocity: ${v.toFixed(2)} m/s`;
+        } else if (idx === 1) {
+          s = u * t + 0.5 * a * t * t;
+          x = 30 + s * 0.5; // scaled displacement
+          c.info.innerHTML = `Time: ${t.toFixed(2)}s<br>Displacement: ${s.toFixed(2)} m`;
+        } else {
+          s = u * t + 0.5 * a * t * t;
+          v = Math.sqrt(u * u + 2 * a * s);
+          x = 30 + s * 0.5;
+          c.info.innerHTML = `Time: ${t.toFixed(2)}s<br>Velocity: ${v.toFixed(2)} m/s<br>Displacement: ${s.toFixed(2)} m`;
+        }
+
+        // Reset once ball reaches far edge
+        if (x > c.canvas.width - 30) {
+          t = 0; 
+        }
+
+        // Draw ball
+        ctx.beginPath();
+        ctx.arc(x, c.canvas.height / 2, 12, 0, Math.PI * 2);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
